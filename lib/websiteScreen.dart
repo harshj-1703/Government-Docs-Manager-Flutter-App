@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:government_docs_manager_app/main.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebSiteScreen extends StatefulWidget {
@@ -14,6 +15,16 @@ class _WebSiteScreenState extends State<WebSiteScreen> {
   late final WebViewController _controller;
   var progressBar = 0;
   bool isLoading = true;
+
+  showSnackBar(String message) {
+    var SnackBarVariable = SnackBar(
+        content: Text(message),
+        backgroundColor: Colors.deepOrange,
+        behavior: SnackBarBehavior.floating,
+        width: 300,
+        duration: Duration(seconds: 2));
+    ScaffoldMessenger.of(context).showSnackBar(SnackBarVariable);
+  }
 
   @override
   void initState() {
@@ -34,10 +45,24 @@ class _WebSiteScreenState extends State<WebSiteScreen> {
               isLoading = false;
             });
           },
-          onWebResourceError: (WebResourceError error) {},
+          onWebResourceError: (WebResourceError error) {
+            showSnackBar('Invalid QR Scanned');
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => MyHomePage()),
+              (route) => false,
+            );
+          },
         ),
-      )
-      ..loadRequest(Uri.parse(widget.url));
+      );
+    _loadUrl(widget.url);
+  }
+
+  void _loadUrl(String url) {
+    if (!url.contains("://")) {
+      url = "http://$url";
+    }
+    _controller.loadRequest(Uri.parse(url));
   }
 
   @override
@@ -46,6 +71,16 @@ class _WebSiteScreenState extends State<WebSiteScreen> {
         appBar: AppBar(
           title: Text("Government Docs Manager"),
           backgroundColor: Color.fromARGB(255, 0, 96, 192),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () {
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(builder: (context) => MyHomePage()),
+                (route) => false,
+              );
+            },
+          ),
         ),
         body: Stack(children: [
           Container(
