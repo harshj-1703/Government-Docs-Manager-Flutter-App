@@ -16,16 +16,6 @@ class _WebSiteScreenState extends State<WebSiteScreen> {
   var progressBar = 0;
   bool isLoading = true;
 
-  showSnackBar(String message) {
-    var SnackBarVariable = SnackBar(
-        content: Text(message),
-        backgroundColor: Colors.deepOrange,
-        behavior: SnackBarBehavior.floating,
-        width: 300,
-        duration: Duration(seconds: 2));
-    ScaffoldMessenger.of(context).showSnackBar(SnackBarVariable);
-  }
-
   @override
   void initState() {
     super.initState();
@@ -55,14 +45,35 @@ class _WebSiteScreenState extends State<WebSiteScreen> {
           },
         ),
       );
+
     _loadUrl(widget.url);
   }
 
   void _loadUrl(String url) {
     if (!url.contains("://")) {
       url = "http://$url";
+    } else if (!url.contains("https://government-docs-fb805.web.app")) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        showSnackBar('Invalid QR Scanned');
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => MyHomePage()),
+          (route) => false,
+        );
+      });
     }
     _controller.loadRequest(Uri.parse(url));
+  }
+
+  void showSnackBar(String message) {
+    var snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.deepOrange,
+      behavior: SnackBarBehavior.floating,
+      width: 300,
+      duration: Duration(seconds: 2),
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   @override
