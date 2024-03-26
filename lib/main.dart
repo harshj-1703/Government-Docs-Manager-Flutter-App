@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:government_docs_manager_app/qrScreen.dart';
 import 'package:government_docs_manager_app/websiteScreen.dart';
 import "./welcomeScreen.dart";
 
@@ -158,7 +159,9 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 100,
                         child: ElevatedButton(
                           onPressed: () {
-                            print("Scan QR Code");
+                            Navigator.of(context).push(MaterialPageRoute(
+                              builder: (context) => const QrScreen(),
+                            ));
                           },
                           child: Icon(
                             Icons.qr_code,
