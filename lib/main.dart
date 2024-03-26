@@ -1,4 +1,7 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:government_docs_manager_app/websiteScreen.dart';
 import "./welcomeScreen.dart";
 
 void main() {
@@ -29,6 +32,52 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  checkInternet() async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
+        // print('connected');
+      }
+    } on SocketException catch (_) {
+      print('not connected');
+      Future<void> _showMyDialog() async {
+        return showDialog<void>(
+          context: context,
+          barrierDismissible: false, // user must tap button!
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('No Internet Connection'),
+              content: SingleChildScrollView(
+                child: ListBody(
+                  children: const <Widget>[
+                    Text('Please Connect To The Internet!'),
+                    // Text('Would you like to approve of this message?'),
+                  ],
+                ),
+              ),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('OK'),
+                  onPressed: () {
+                    SystemNavigator.pop();
+                  },
+                ),
+              ],
+            );
+          },
+        );
+      }
+
+      _showMyDialog();
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    checkInternet();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +113,11 @@ class _MyHomePageState extends State<MyHomePage> {
                         height: 100,
                         child: ElevatedButton(
                           onPressed: () {
-                            print("Go to Website");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WebSiteScreen()),
+                            );
                           },
                           child: Icon(
                             Icons.login,
