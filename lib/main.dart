@@ -117,7 +117,10 @@ class _MyHomePageState extends State<MyHomePage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => WebSiteScreen()),
+                                  builder: (context) => WebSiteScreen(
+                                        url:
+                                            'https://government-docs-fb805.web.app/user-login',
+                                      )),
                             );
                           },
                           child: Icon(

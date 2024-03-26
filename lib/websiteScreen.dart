@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebSiteScreen extends StatefulWidget {
-  const WebSiteScreen({super.key});
+  final String url;
+
+  const WebSiteScreen({Key? key, required this.url}) : super(key: key);
 
   @override
   State<WebSiteScreen> createState() => _WebSiteScreenState();
@@ -35,8 +37,7 @@ class _WebSiteScreenState extends State<WebSiteScreen> {
           onWebResourceError: (WebResourceError error) {},
         ),
       )
-      ..loadRequest(
-          Uri.parse('https://government-docs-fb805.web.app/user-login'));
+      ..loadRequest(Uri.parse(widget.url));
   }
 
   @override

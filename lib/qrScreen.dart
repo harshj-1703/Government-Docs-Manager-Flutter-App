@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:government_docs_manager_app/websiteScreen.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrScreen extends StatefulWidget {
@@ -50,7 +51,13 @@ class _QrScreenState extends State<QrScreen> {
                         height: 30,
                         child: ElevatedButton(
                           onPressed: () async {
-                            print('Data: ${result!.code}');
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => WebSiteScreen(
+                                        url: result!.code!,
+                                      )),
+                            );
                           },
                           style: ElevatedButton.styleFrom(
                             primary: Colors.white,
